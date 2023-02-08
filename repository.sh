@@ -1,31 +1,51 @@
 #!/bin/bash
-#
-#
-#
-#
-#
-#
-espaciador= '<---------------------------------->'
-archivo="touch README.md" ; "echo 'primer commit del repositorio' >> README.md"
-commit= "git add . -A" ; "git commit -m "$committ""
- echo "¿Quieres crear un nuevo repositorio?" ; read respuesta
+echo "
+#####################################################################################################################################################
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+#-------------      _______       ____     ____________  -------------------------------------------------------------------------------------------#
+#------------     /        |     |____|   |            |  ------------------------------------------------------------------------------------------#
+#-----------     /    _____|      ____    |____    ____|   -----------------------------------------------------------------------------------------#
+#----------     /    /           |    |       |    |        ----------------------------------------------------------------------------------------#
+#---------     /    /    ___     |    |       |	   |         ---------------------------------------------------------------------------------------#
+#----------    \    \   |   |    |    |       |	   |        ----------------------------------------------------------------------------------------#
+#-----------    \    \__|   |    |    |       |	   |       -----------------------------------------------------------------------------------------#
+#------------    \          |    |    |       |    |      ------------------------------------------------------------------------------------------#
+#-------------    \_________|    |____|       |____|     -------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+#####################################################################################################################################################
+"
+
+
+espaciador= echo "<---------------------------------->"
+archivo=`touch README.md ; echo "primer commit del repositorio" >> README.md`
+commit=`git add . -A ; echo "escribe un commit: "; read committ && it commit -m "$committ"`
+directorio=`read directorio && mkdir $directorio && cd $directorio/`
+rama=`read rama ; git branch $rama && git checkout $rama/`
+
+
+echo "¿Quieres crear un nuevo repositorio?" ; read respuesta
+
 if [[ $respuesta = "si" ]]
 then
 	echo "Creando repositorio..."
-	echo "--------------------------------"
-	echo "Nombre del repositorio: " ; read directorio && mkdir $directorio ; cd $directorio/ ; git init .
-	echo "--------------------------------"	
-	$archivo ; echo "Nombre del commit: " ; read committ && $commit
+	echo $espaciador
+	echo "Nombre del repositorio: " ; $directorio ; git init . && $archivo
+	echo $espaciador	
+	echo "Nombre del commit: " ; $commit
+	echo $espaciador
 fi
 
 echo "¿Que deseas hacer?" ; read opcion
 
 case $opcion in
 	"actualizar")
-		echo "¿Desde donde quieres actualizar?"
-		read directorio
-		git checkout master && cd $directorio ; read committ && $commit
-		echo "repositorio actualizado"
+		echo "¿Desde donde quieres actualizar? <rama> <directorio>"
+		$espaciador
+		read movimiento ; read carpeta
+		git checkout $movimiento && cd $carpeta ; $commit
+		git show HEAD
 	;;
 	"clonar")
 		echo "en mantenimiento..."
@@ -42,14 +62,15 @@ case $opcion in
 	"ramas")
 		echo "¿Cuantas ramas vas a crear?"
 		read numero
-		echo "Escribe el nombre de la primera rama"
-		read rama && git branch $rama; git checkout $rama
-		while [ numero -ge 0 ]
+		echo $espaciador
+		while [ $numero -ge 0 ]
 		do
 			echo "Escribe el nombre de la rama"
-			git checkout master; read rama && git branch $rama; git checkout $rama
-			read committ; $commit
-			
+			echo $espaciador
+			$rama && $commit; git checkout master
+			echo $espaciador
+			git branch -av
+			numero= $numero-1
 		done
 	;;
 	*)
