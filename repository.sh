@@ -49,12 +49,11 @@ then
 	espaciador
 	echo "Nombre del repositorio: " ; $directorio ; git init . && $archivo
 	espaciador	
-	echo "Nombre del commit: " ; commit "
-	echo $espaciador
+	echo "Nombre del commit: " ; commit
+	espaciador
 fi
 
 echo "¿Que deseas hacer?" ; read opcion
-
 case $opcion in
 	"actualizar")
 		echo "¿Desde donde quieres actualizar? <rama> <directorio>"
