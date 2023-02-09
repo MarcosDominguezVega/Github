@@ -18,11 +18,27 @@ echo "
 "
 
 
-espaciador= echo "<---------------------------------->"
-archivo=`touch README.md ; echo "primer commit del repositorio" >> README.md`
-commit=`git add . -A ; echo "escribe un commit: "; read committ && it commit -m "$committ"`
-directorio=`read directorio && mkdir $directorio && cd $directorio/`
-rama=`read rama ; git branch $rama && git checkout $rama/`
+espaciador(){
+       	echo "<---------------------------------->"
+}
+
+archivo(){ 
+	touch README.md
+	echo "primer commit del repositorio" >> README.md`
+}
+
+commit(){ 
+	git add . -A
+       	git commit -m "$1"`
+}
+
+directorio(){
+	mkdir $1 && cd $1/
+}
+
+rama(){
+	git branch $1 && git checkout $1/`
+}
 
 
 echo "¿Quieres crear un nuevo repositorio?" ; read respuesta
@@ -30,10 +46,10 @@ echo "¿Quieres crear un nuevo repositorio?" ; read respuesta
 if [[ $respuesta = "si" ]]
 then
 	echo "Creando repositorio..."
-	echo $espaciador
+	espaciador
 	echo "Nombre del repositorio: " ; $directorio ; git init . && $archivo
-	echo $espaciador	
-	echo "Nombre del commit: " ; $commit
+	espaciador	
+	echo "Nombre del commit: " ; commit "
 	echo $espaciador
 fi
 
