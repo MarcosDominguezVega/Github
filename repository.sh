@@ -24,20 +24,26 @@ espaciador(){
 
 archivo(){ 
 	touch README.md
-	echo "primer commit del repositorio" >> README.md`
+	echo "primer commit del repositorio" >> README.md
 }
 
 commit(){ 
 	git add . -A
-       	git commit -m "$1"`
+	echo "Introduce el nombre del commit: " 
+	read commit
+       	git commit -m "$commit"
 }
 
 directorio(){
-	mkdir $1 && cd $1/
+	echo "Escribe el nombre del directorio: "
+	read directorio
+	mkdir $directorio && cd $directorio/
 }
 
 rama(){
-	git branch $1 && git checkout $1/`
+	echo "Escribe el nombre de la rama: "
+	read rama
+	git branch $rama && git checkout $rama
 }
 
 
@@ -47,43 +53,74 @@ if [[ $respuesta = "si" ]]
 then
 	echo "Creando repositorio..."
 	espaciador
-	echo "Nombre del repositorio: " ; $directorio ; git init . && $archivo
+	echo "Nombre del repositorio: " ; directorio ; git init . && archivo
 	espaciador	
+	ruta= pwd
 	echo "Nombre del commit: " ; commit
 	espaciador
 fi
 
-echo "¿Que deseas hacer?" ; read opcion
+echo "¿Que deseas hacer?" ; 
+opciones=(actualizar/clonar/eliminar/restaurar/remoto/ramas)
+for i in "$opciones"
+do
+	echo $i
+	espaciador
+done && read opcion
 case $opcion in
 	"actualizar")
-		echo "¿Desde donde quieres actualizar? <rama> <directorio>"
-		$espaciador
-		read movimiento ; read carpeta
-		git checkout $movimiento && cd $carpeta ; $commit
+		echo "¿Que quieres actualizar? una rama(1) o un directorio(2)"
+		read respuesta 
+		if [[ $respuesta = 1 ]]
+		then	
+			echo "Muevete a donde quieres actualiza: "
+			cd $ruta && espaciador
+			commit; echo "Directorio actualizado"
+		elif [[ $respuesta = 2 ]]
+		then
+			echo "Muevete a la rama master: "
+			read ruta
+			cd $ruta && git checkout branch $ruta && commit
+		fi
+		espaciador
 		git show HEAD
 	;;
 	"clonar")
-		echo "en mantenimiento..."
+		echo "¿Quieres clonar un repositorio?" ; read respuesta
+		if [[ $respuesta = "si" ]]
+		then
+			espaciador
+			echo "Que repositorio es el que quieres clonar"
+			read clonacion
+			git clone $clonacion && clonaciones=($clonacion)	
+				for i in "$clonaciones"
+				do 
+				      	echo "estas son las clonaciones anteriores"
+					espaciador
+					echo $i
+				done
+		fi			
 	;;
 	"eliminar")
-		echo "en mantenimiento..."
+		echo "¿Que quieres eliminar?"
+
 	;;
 	"restaurar")
 		echo "en mantenimiento..."
 	;;
 	"remoto")
-		echo "en mantenimiento..."
+		echo "en mantenimiento..i"
 	;;
 	"ramas")
 		echo "¿Cuantas ramas vas a crear?"
 		read numero
-		echo $espaciador
+		espaciador
 		while [ $numero -ge 0 ]
 		do
 			echo "Escribe el nombre de la rama"
-			echo $espaciador
-			$rama && $commit; git checkout master
-			echo $espaciador
+			espaciador
+			rama && archivo ; commit &&  git checkout master
+			espaciador
 			git branch -av
 			numero= $numero-1
 		done
