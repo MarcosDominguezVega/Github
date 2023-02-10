@@ -47,7 +47,25 @@ rama(){
 }
 
 
-echo "¿Quieres crear un nuevo repositorio?" ; read respuesta
+
+echo "¿Quieres instalar git o actualizarlo?" ; read respuesta
+if [[ $respuesta = "si" ]]
+then
+	sudo apt install git && sudo apt install gh && sudo apt upgrade -y 
+	echo "Es necesario que configures tu git para poder empezar"
+	echo "Escribe tu nombre y tu correo"
+
+	echo "Usuario: " && read nombreUsuario ; git config --global user.name "$nombreUsuario"
+	echo "Email: " && read correo ; git config --global user.email $correo
+	echo "Crea un usuario en https://github.com dirijete a opciones de desarrollador y genera un token para el sigueinte paso"
+	echo "Quieres registrar automaticamente tu cuenta de gitHub" ; read respuesta
+	if [[ $respuesta = "si" ]]
+	then
+		git auth login
+	fi
+
+fi
+	echo "¿Quieres crear un nuevo repositorio?" ; read respuesta
 
 if [[ $respuesta = "si" ]]
 then
@@ -103,13 +121,69 @@ case $opcion in
 	;;
 	"eliminar")
 		echo "¿Que quieres eliminar?"
+		eliminaciones=(repositorios/ramas)
+		posiciones=(trabajo/intercambio/temporal)
+		for i in $eliminaciones
+		do
+			echo $i
+		done
+		echo "De donde quieres eliminar el archivo"
+		espaciador
+		read respuesta
+		if [[ $respuesta = "repositorios" ]]
+		then
+			espaciador
+			echo "¿Que forma de eliminacion quieres?" ; read forma
+			for i in $posiciones
+			do
+				echo $i
+			done
+			case $forma in
+				"trabajo")
+					
+					;;
+				"intercambio")
 
+					;;
+				"temporal")
+
+					;;
+				*)
+					echo "Opcion Invalida"
+					;;
+			esac
+		elif [ $respuesta= "ramas" ]
+		then
+			echo "¿Que forma de eliminacion quieres?" ; read forma
+			for i in $posiciones
+			do
+				echo $i
+			done
+			case $forma in
+				"trabajo")
+					;;
+				"intercambio")
+					;;
+				"temporal")
+					;;
+				*)
+					echo "Opcion Invalida"
+					;;
+			esac
+		else
+			echo "Error"
+		fi
+	
 	;;
 	"restaurar")
 		echo "en mantenimiento..."
 	;;
 	"remoto")
-		echo "en mantenimiento..i"
+		echo "¿Deseas crear un repositorio remoto?" ; read respuesta
+		if [[ $respuesta = "si" ]]
+		then
+			git remote add .
+		fi
 	;;
 	"ramas")
 		echo "¿Cuantas ramas vas a crear?"
